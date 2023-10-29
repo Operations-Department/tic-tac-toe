@@ -10,7 +10,7 @@ html,
 }
 
 html {
-    background: #511111;
+    background: var(--dark-red);
     font-family: Unit-block, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     color: var(--font-color);
 }
@@ -25,6 +25,7 @@ html {
     --med-font: 4rem;
     --font-color: rgb(255, 255, 255);
     --border-radius: 25px;
+    --dark-red: #511111;
 }
 
 .html-page {
@@ -68,6 +69,9 @@ div {
     grid-template-rows: repeat(3, 1fr);
     height: 100%;
     width: 50%;
+    justify-items: center;
+    align-items: center;
+    font-size: var(--med-font);
 }
 
 .game-square {
@@ -116,20 +120,23 @@ div {
 .restart-button {
     background: none;
     height: 80%;
-    width: 35%;
+    width: 30%;
     font-size: var(--med-font);
     border-radius:var(--border-radius);
     color: var(--font-color);
-    transition: ease-in-out 0.2s;
+    transition: ease-in-out 0.15s;
 }
 
 .restart-button:hover {
     cursor: pointer;
     border: 2px solid black;
-    /* transform: scale(1.1); */
     transform: translateY(5px);
     color: black;
     background: white;
+}
+
+.restart-button:active {
+    transform: scale(0.9);
 }
 
 .footer {
