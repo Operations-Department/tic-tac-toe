@@ -36,10 +36,6 @@ html {
 
 }
 
-div {
-    /* border: 1px dotted gold; */
-}
-
 .header {
     background-color: black;
     display: flex;
@@ -76,39 +72,48 @@ div {
 
 .game-square {
     border: 1px solid gold;
-    transition: ease-in-out 0.5s;
+    transition: ease-in-out 0.2s;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    color: var(--font-color);
 }
 
 .game-square:hover {
     cursor: pointer;
-    border: 1.5px solid white;
+    border: 2px solid white;
+    transform: scale(0.9);
 }
 
-.square1,
-.square2,
-.square3 {
+.cell-0,
+.cell-1,
+.cell-2 {
     border-top: none;
 }
 
-.square3,
-.square6,
-.square9 {
+.cell-2,
+.cell-5,
+.cell-8 {
     border-right: none;
 }
 
-.square1,
-.square4,
-.square7 {
+.cell-0,
+.cell-3,
+.cell-6 {
     border-left: none;
 }
 
-.square7,
-.square8,
-.square9 {
+.cell-6,
+.cell-7,
+.cell-8 {
     border-bottom: none;
 }
 
-.button-container{
+
+.restart-button-container{
     grid-area: 3/2;
     height: 100%;
     width: 100%;
@@ -129,10 +134,11 @@ div {
 
 .restart-button:hover {
     cursor: pointer;
-    border: 2px solid black;
+    border: none;
     transform: translateY(5px);
-    color: black;
-    background: white;
+    color: var(--dark-red);
+    background: var(--font-color);
+    box-shadow: black 5px 5px 20px 0px;
 }
 
 .restart-button:active {
