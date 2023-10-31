@@ -1,5 +1,7 @@
-const gameBox = document.getElementById('game-box');
-const restart = document.getElementById('restart-button');
+const domVariables = {
+    gameBox: document.getElementById('game-box'),
+    restart: document.getElementById('restart-button'),
+};
 
 //stores the game grid items
 const gameBoard = {
@@ -10,41 +12,50 @@ const gameBoard = {
     ]
 };
 
-//displays the grid to the dom
+//sets up and displays the grid to the dom
 const gameController = {
-    displayGrid: function() {
+    displayGrid: (function() {
         return gameBoard.grid.forEach((cellContent, index) => {
             const cell = document.createElement('button');
             cell.textContent = cellContent;
 
-            gameBox.appendChild(cell);
+            domVariables.gameBox.appendChild(cell);
             cell.classList.add('game-square');
             cell.classList.add(`cell-${index}`);
             cell.setAttribute('data-index', `${index}`);
         });
-    }
+    })(),
+    markCell: (function() {
+        domVariables.gameBox.addEventListener('click', function(event) {
+            if (event.target.textContent !== '') return;
+            let index = event.target.getAttribute('data-index');
+            //give data-index to updateDisplay()
+        });
+    })(),
+    updateDisplay: (function() {
+        //update the display
+    })(),
+    restartGame: (function() {
+        domVariables.restart.addEventListener('click', () => {
+            gameBoard.grid = ['', '', '', '', '', '', '', '', ''];
+            //gameController.updateDisplay();
+        });
+    })(),
 };
 
-//puts x/o mark into cell/array;
-const mark = (function() {
-    gameBox.addEventListener('click', function(event) {
-        if (event.target.textContent !== '') return;
-        let index = event.target.getAttribute('data-index');
-        event.target.textContent = 'X';
-        gameBoard.grid[index] = 'X';  
-        console.log(gameBoard.grid);
-    });
-})();
-
-//setup game/grid on screen load
-const setupGame = (function() {
-    document.addEventListener('DOMContentLoaded', () => {
-        gameController.displayGrid();
-    });
-})();
+// //puts x/o mark into cell & array;
+// const markCell = (function() {
+//     domVariables.gameBox.addEventListener('click', function(event) {
+//         if (event.target.textContent !== '') return;
+//         let index = event.target.getAttribute('data-index');
+//         event.target.textContent = 'X';
+//         gameBoard.grid[index] = 'X';  
+//         console.log(gameBoard.grid);
+//     });
+// })();
 
 //factory to create players
-const createPlayer = (function(name, symbol, order) {
+const createPlayer = function (name, symbol, order) {
     return {
         name,
         symbol,
@@ -53,7 +64,7 @@ const createPlayer = (function(name, symbol, order) {
             return `${this.name} has the symbol '${this.symbol}' and is ${this.order} in play order.`;
         }
     };
-})();
+};
 
 const player1 = createPlayer('Player1', 'X', 'first');
 const player2 = createPlayer('Player2', 'O', 'second');
