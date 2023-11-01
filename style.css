@@ -57,6 +57,16 @@ html {
     justify-items: center;
 }
 
+#instructions {
+    height: 100%;
+    width: 100%;
+    grid-area: 1/2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--med-font);
+}
+
 .game-box {
     grid-row: 2/3;
     grid-column: 2/3;
