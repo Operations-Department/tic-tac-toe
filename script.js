@@ -3,7 +3,7 @@ const domVariables = {
     gameBox: document.getElementById('game-box'),
     restart: document.getElementById('restart-button'),
     cell: document.querySelectorAll('.game-square'),
-    playerTurn: true,       //variable to toggle between players
+    player1Turn: true,       //variable to toggle between player's turn
 
 };
 
@@ -42,25 +42,30 @@ const gameController = {
             domVariables.cell[i].textContent = gameBoard.grid[i];
         }
         console.log(gameBoard.grid);
+        gameController.togglePlayerTurn();
         return;
     },
 
     //send player marker to array, calls updateDisplay to show in grid
     playRound: function(event) {
         if (event.target.textContent !== '') return; // prevents from clicking the same square more than once
-
         let index = event.target.getAttribute('data-index');
 
-        // gameBoard.grid[index] = 'X';
-        gameBoard.grid[index] = 'O';
-
+        if (domVariables.player1Turn) gameBoard.grid[index] = player1.makeMark();
+        if (!domVariables.player1Turn) gameBoard.grid[index] = player2.makeMark();
         gameController.updateDisplay();
     },
 
-    //empties array and calls updateDisplay to reflect empty array
+    //empties array, sets X to start new game, updateDisplay called and relects empty array
     restartGame: function() {
-        gameBoard.grid = ['', '', '', '', '', '', '', '', ''];
+        gameBoard.grid = ['', '', '', '', '', '', '', '', ''];  //reset grid
         gameController.updateDisplay();
+        domVariables.player1Turn = true;   //reset - always 'X' starts
+    },
+
+    togglePlayerTurn: function() {
+        if (domVariables.player1Turn) return domVariables.player1Turn = false;
+        if (!domVariables.player1Turn) return domVariables.player1Turn = true; 
     },
 
 };
@@ -69,12 +74,12 @@ domVariables.gameBox.addEventListener('click', gameController.playRound);
 domVariables.restart.addEventListener('click', gameController.restartGame);
 
 //factory to create players
-const createPlayer = function (symbol) {
+const createPlayer = function(mark) {
 
     const player = {
-        symbol: symbol,
+        mark: mark,
         makeMark() {
-            return this.symbol;
+            return this.mark;
         }
     };
 
@@ -82,5 +87,5 @@ const createPlayer = function (symbol) {
 
 };
 
-const playerX = createPlayer('X');
-const playerO = createPlayer('O');
+const player1 = createPlayer('X');
+const player2 = createPlayer('O');
