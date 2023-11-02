@@ -28,13 +28,13 @@ const gameController = {
         return gameBoard.grid.forEach((cellContent, index) => {
             const cell = document.createElement('button');
             cell.textContent = cellContent;
-
             domVariables.gameBox.appendChild(cell);
+
             cell.classList.add('game-square');
             cell.classList.add(`cell-${index}`);
-            cell.setAttribute('data-index', `${index}`); //connect with array index
+            cell.setAttribute('data-index', `${index}`); //connect with gameBoard.griday index
 
-            domVariables.cell = document.querySelectorAll('.game-square'); //ensures variables are assigned correctly and prevents error
+            domVariables.cell = document.querySelectorAll('.game-square'); //ensures variables are assigned correctly and prevent errors
             
             domVariables.instructions.textContent = `X's turn`
 
@@ -42,7 +42,7 @@ const gameController = {
 
     })(),
 
-    //updates the display to reflect gameBoard grid array
+    //updates the display to reflect gameBoard grid gameBoard.griday
     updateDisplay: function() {
 
         for (let i = 0; i < gameBoard.grid.length; i++) {
@@ -53,7 +53,7 @@ const gameController = {
         return;
     },
 
-    //send player marker to array, calls updateDisplay to show in grid
+    //send player marker to gameBoard.grid, calls updateDisplay to show in grid
     playRound: function(event) {
 
         if (event.target.textContent !== '') return; // prevents from clicking the same square more than once
@@ -62,10 +62,11 @@ const gameController = {
         if (domVariables.player1Turn) gameBoard.grid[index] = player1.makeMark();
         if (!domVariables.player1Turn) gameBoard.grid[index] = player2.makeMark();
         gameController.updateDisplay();
+        gameController.getWinner();
 
     },
 
-    //empties array, sets X to start new game, updateDisplay called and relects empty array
+    //empties gameBoard.grid, sets X to start new game, updateDisplay called and reflects empty gameBoard.griday
     restartGame: function() {
 
         gameBoard.grid = ['', '', '', '', '', '', '', '', ''];  //reset grid
@@ -88,18 +89,38 @@ const gameController = {
 
     },
 
-    checkForWinner: function() {
-        //loop through grid
-        //compare to find winning combination
-        return;
-    }
+    getWinner: function() {
+        for (let i = 0; i < gameBoard.grid.length; i += 3) {
+
+            const row = gameBoard.grid.slice(i, i + 3).join('');
+
+            if (row.match(/X{3}|O{3}/)) return domVariables.instructions.textContent = row[0] + ' wins';
+        };
+    
+        for (let i = 0; i < 3; i++) {
+
+            const column = [gameBoard.grid[i], gameBoard.grid[i+3], gameBoard.grid[i+6]].join('');
+
+            if (column.match(/X{3}|O{3}/)) return domVariables.instructions.textContent = column[0] + ' wins';        
+        };
+    
+        const diagonalLeft = [gameBoard.grid[0], gameBoard.grid[4], gameBoard.grid[8]].join('');
+        const diagonalRight = [gameBoard.grid[2], gameBoard.grid[4], gameBoard.grid[6]].join('');
+
+        if (diagonalLeft.match(/X{3}|O{3}/)) return domVariables.instructions.textContent = diagonalLeft[0] + ' wins';
+        if (diagonalRight.match(/X{3}|O{3}/)) return domVariables.instructions.textContent = diagonalRight[0] + ' wins';
+
+        const string = gameBoard.grid.join('');
+        if (string.length === 9) domVariables.instructions.textContent = `It's a Draw`;
+
+    },
 
 };
 
 domVariables.gameBox.addEventListener('click', gameController.playRound);
 domVariables.restart.addEventListener('click', gameController.restartGame);
 
-//factory to create players
+//factory function to create players
 const createPlayer = function(mark) {
 
     const player = {
