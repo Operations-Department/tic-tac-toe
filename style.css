@@ -51,7 +51,7 @@ html {
 .body {
     background: linear-gradient(180deg, black, transparent);
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    /* grid-template-columns: 1fr 2fr 1fr; */
     grid-template-rows: 1fr 4fr 1fr;
     align-items: center;
     justify-items: center;
@@ -60,7 +60,7 @@ html {
 #instructions {
     height: 100%;
     width: 100%;
-    grid-area: 1/2;
+    /* grid-area: 1/2; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -69,15 +69,15 @@ html {
 
 .game-box {
     grid-row: 2/3;
-    grid-column: 2/3;
+    /* grid-column: 2/3; */
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    height: 100%;
-    width: 50%;
+    height: 430px;
+    width: 400px;
     justify-items: center;
     align-items: center;
-    font-size: var(--med-font);
+    font-size: 5.5rem;
 }
 
 .game-square {
@@ -124,7 +124,7 @@ html {
 
 
 .restart-button-container{
-    grid-area: 3/2;
+    /* grid-area: 3/2; */
     height: 100%;
     width: 100%;
     display: flex;
@@ -135,7 +135,7 @@ html {
 .restart-button {
     background: none;
     height: 80%;
-    width: 30%;
+    width: 270px;
     font-size: var(--med-font);
     border-radius:var(--border-radius);
     color: var(--font-color);

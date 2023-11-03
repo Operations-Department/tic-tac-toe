@@ -5,6 +5,7 @@ const domVariables = {
     cell: document.querySelectorAll('.game-square'),
     instructions: document.getElementById('instructions'),
     player1Turn: true,       //variable to toggle between player's turn
+    gameOver: false,         //flag to stop user input after game ends
 
 };
 
@@ -32,7 +33,7 @@ const gameController = {
 
             cell.classList.add('game-square');
             cell.classList.add(`cell-${index}`);
-            cell.setAttribute('data-index', `${index}`); //connect with gameBoard.griday index
+            cell.setAttribute('data-index', `${index}`); //connect with grid index
 
             domVariables.cell = document.querySelectorAll('.game-square'); //ensures variables are assigned correctly and prevent errors
             
@@ -42,7 +43,7 @@ const gameController = {
 
     })(),
 
-    //updates the display to reflect gameBoard grid gameBoard.griday
+    //updates the display to reflect gameBoard grid grid
     updateDisplay: function() {
 
         for (let i = 0; i < gameBoard.grid.length; i++) {
@@ -53,10 +54,10 @@ const gameController = {
         return;
     },
 
-    //send player marker to gameBoard.grid, calls updateDisplay to show in grid
+    //send player marker to grid, calls updateDisplay to show in grid
     playRound: function(event) {
 
-        if (event.target.textContent !== '') return; // prevents from clicking the same square more than once
+        if (domVariables.gameOver || event.target.textContent !== '') return; // prevents from clicking the same square more than once or at all if game over
         let index = event.target.getAttribute('data-index');
 
         if (domVariables.player1Turn) gameBoard.grid[index] = player1.makeMark();
@@ -66,15 +67,7 @@ const gameController = {
 
     },
 
-    //empties gameBoard.grid, sets X to start new game, updateDisplay called and reflects empty gameBoard.griday
-    restartGame: function() {
-
-        gameBoard.grid = ['', '', '', '', '', '', '', '', ''];  //reset grid
-        gameController.updateDisplay();
-        domVariables.player1Turn = true;   //reset - always 'X' starts
-
-    },
-
+    //switch between players
     togglePlayerTurn: function() {
 
         if (domVariables.player1Turn) {
@@ -89,29 +82,53 @@ const gameController = {
 
     },
 
+    //checks for a winner, if no winner, declares a draw
     getWinner: function() {
         for (let i = 0; i < gameBoard.grid.length; i += 3) {
 
             const row = gameBoard.grid.slice(i, i + 3).join('');
 
-            if (row.match(/X{3}|O{3}/)) return domVariables.instructions.textContent = row[0] + ' wins';
+            if (row.match(/X{3}|O{3}/)) {
+                domVariables.gameOver = true;
+                return domVariables.instructions.textContent = `Player ${row[0]} wins!`;
+            };
         };
     
         for (let i = 0; i < 3; i++) {
 
             const column = [gameBoard.grid[i], gameBoard.grid[i+3], gameBoard.grid[i+6]].join('');
 
-            if (column.match(/X{3}|O{3}/)) return domVariables.instructions.textContent = column[0] + ' wins';        
+            if (column.match(/X{3}|O{3}/)) {
+                domVariables.gameOver = true;
+                return domVariables.instructions.textContent = `Player ${column[0]} wins!`;
+            };        
         };
     
         const diagonalLeft = [gameBoard.grid[0], gameBoard.grid[4], gameBoard.grid[8]].join('');
         const diagonalRight = [gameBoard.grid[2], gameBoard.grid[4], gameBoard.grid[6]].join('');
 
-        if (diagonalLeft.match(/X{3}|O{3}/)) return domVariables.instructions.textContent = diagonalLeft[0] + ' wins';
-        if (diagonalRight.match(/X{3}|O{3}/)) return domVariables.instructions.textContent = diagonalRight[0] + ' wins';
+        if (diagonalLeft.match(/X{3}|O{3}/)) {
+            domVariables.gameOver = true;
+            return domVariables.instructions.textContent = `Player ${diagonalLeft[0]} wins!`;
+        };
+        if (diagonalRight.match(/X{3}|O{3}/)) {
+            domVariables.gameOver = true;
+            return domVariables.instructions.textContent = `Player ${diagonalRight[0]} wins!`;
+        };
 
         const string = gameBoard.grid.join('');
         if (string.length === 9) domVariables.instructions.textContent = `It's a Draw`;
+
+    },
+
+    //empties gameBoard.grid, sets X to start new game, updateDisplay called and reflects empty grid
+    restartGame: function() {
+
+        gameBoard.grid = ['', '', '', '', '', '', '', '', ''];  //reset array
+        gameController.updateDisplay();                         //clears grid display
+        domVariables.player1Turn = true;                        //reset - always 'X' starts
+        domVariables.instructions.textContent = `X's turn`;     //resolves bug - make sure display is correct
+        domVariables.gameOver = false;                          //reset gameOver
 
     },
 
@@ -127,7 +144,8 @@ const createPlayer = function(mark) {
         mark: mark,
         makeMark() {
             return this.mark;
-        }
+        },
+
     };
 
     return player;
